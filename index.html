@@ -1,0 +1,119 @@
+<html>
+	<head>
+		<title>Test Title Here</title>
+		<style>
+			#zombie_map {
+				height: 50%;
+				width: 50%;
+				left: 0;
+				position: absolute;
+				top: 35;
+				background-color: grey;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<div id="zombie_map"></div>
+
+		<form>
+			<select id="icon_to_use">
+			  <option value="zombie.png">Zombie</option>
+			  <option value="hospital.png">Hospital</option>
+			  <option value="weapons.png">Weapons</option>			  
+			</select>
+		</form>
+		
+		<script>
+			var zombie_map;
+			var all_markers = []
+			var data = `45.30353908449256 -122.96381128305052 hospital.png
+					45.303041037369375 -122.96935809129332 hospital.png
+					45.303591907415644 -122.96847832673643 weapons.png
+					45.30516713982452 -122.96496999734495 weapons.png
+					45.30232980339977 -122.9655922698364 weapons.png
+					45.302963688749394 -122.96788824075315 zombie.png
+					45.304140885595416 -122.9662574576721 zombie.png
+					45.30293350389344 -122.96454084390257 zombie.png`;
+			var markers = data.split("\n");
+			
+			function initMap() {
+					zombie_map = new google.maps.Map(document.getElementById('zombie_map'), {
+					zoom: 10,
+					center: {lat: 45.303873, lng: -122.966236}
+				});
+				
+				for(var i=0; i < markers.length; i++){
+					var marker_data = markers[i].trim();
+					marker_data = marker_data.split(" ");
+					var latitude = marker_data[0];
+					var longitude = marker_data[1];
+					var emoji = marker_data[2];
+					var marker_position = new google.maps.LatLng(latitude, longitude);
+					
+					var marker = new google.maps.Marker({
+					  position: marker_position,
+					  map: zombie_map,
+					  icon: emoji
+					});
+					
+					all_markers.push(marker);
+				}
+	
+				<!--var marker = new google.maps.Marker({
+				  <!--position: {lat: 45.303873, lng: -122.966236 },
+				  <!--map: zombie_map
+				<!--});
+				
+				zombie_map.addListener('click', function(e) {
+				  var location = e.latLng;
+				  place_marker(location);
+				});
+				
+				if(navigator.geolocation) {
+					navigator.geolocation.watchPosition(set_my_position);
+				}
+				else {
+					alert("Geolocation doesn't work in your browser");
+				}
+								
+				
+			}
+			
+			function set_my_position(position){
+			
+				var latitude = position.coords.latitude;
+				var longitude = position.coords.longitude;
+				var pos = new google.maps.LatLng(latitude, longitude);
+				
+				var myposition = new google.maps.Marker({
+					  position: pos,
+					  map: zombie_map,
+					  icon: emoji
+					});
+				all_markers.push(myposition);
+				
+			
+			}
+			
+			function place_marker(location){
+				var emoji = document.getElementById('icon_to_use').value;
+			
+				var marker = new google.maps.Marker({
+				  position: location,
+				  map: zombie_map,
+				  icon: emoji
+				});
+				console.log(location.lat() + " " + location.lng() + " " + emoji);
+			}
+			
+		</script>
+		
+
+
+		<script async defer
+		  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCz056QHaH4vUZUSOp_9LvREzpQ2mn6XO0&callback=initMap">
+		</script>
+	</body>
+	
+</html>
