@@ -72,6 +72,7 @@
 				
 				if(navigator.geolocation) {
 					navigator.geolocation.watchPosition(set_my_position);
+					alert("Geolocation is being tracked");
 				}
 				else {
 					alert("Geolocation doesn't work in your browser");
@@ -86,12 +87,12 @@
 				var longitude = position.coords.longitude;
 				var pos = new google.maps.LatLng(latitude, longitude);
 				
-				var myposition = new google.maps.Marker({
+				var mark = new google.maps.Marker({
 					  position: pos,
 					  map: zombie_map,
-					  icon: emoji
+					  icon: hospital.png
 					});
-				all_markers.push(myposition);
+				all_markers.push(mark);
 				
 			
 			}
