@@ -39,9 +39,14 @@
 			
 			function initMap() {
 					zombie_map = new google.maps.Map(document.getElementById('zombie_map'), {
-					zoom: 10,
+					zoom: 16,
 					center: {lat: 45.303873, lng: -122.966236}
 				});
+				
+				        old_position = new google.maps.Marker({
+						position: {lat: -37.218, lng: 175.867046},
+						map: zombie_map,
+						});
 				
 				for(var i=0; i < markers.length; i++){
 					var marker_data = markers[i].trim();
@@ -59,11 +64,6 @@
 					
 					all_markers.push(marker);
 				}
-	
-				<!--var marker = new google.maps.Marker({
-				  <!--position: {lat: 45.303873, lng: -122.966236 },
-				  <!--map: zombie_map
-				<!--});
 				
 				zombie_map.addListener('click', function(e) {
 				  var location = e.latLng;
@@ -82,18 +82,29 @@
 			}
 			
 			function set_my_position(position){
+				old_position.setMap(null);
 			
 				var latitude = position.coords.latitude;
 				var longitude = position.coords.longitude;
 				var pos = new google.maps.LatLng(latitude, longitude);
 				
-				var mark = new google.maps.Marker({
+				var marker = new google.maps.Marker({
 					  position: pos,
 					  map: zombie_map,
-					  icon: hospital.png
 					});
-				all_markers.push(mark);
-				
+					
+				old_position = marker;
+				for (var i = 0; i < all_markers.length; i++) {
+					var distance = google.maps.geometry.spherical.computeDistanceBetween(pos, all_markers[i].getPosition());
+				if(distance < tolerance){
+					var what_is_it = all_markers[i].getIcon();
+					what_is_it = what_is_it.replace(".png", "");
+					alert("Found the " + what_is_it );
+					all_markers[i].setMap(null);
+				  }
+				}
+				all_markers.push(marker);
+				<!--function set_my_position(); -->
 			
 			}
 			
